@@ -11,8 +11,6 @@ gem install kapacitor-ruby
 ```
 
 ## Usage
-
-You can optionally pass a `ca_cert` keyword argument specifying the path to the FreeIPA CA certificate. Default is /etc/ipa/ca.crt.
 ```
 require 'kapacitor/client'
 kapacitor = Kapacitor::Client.new(host: 'localhost:9092', version: 'v1')
