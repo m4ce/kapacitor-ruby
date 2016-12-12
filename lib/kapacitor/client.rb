@@ -11,7 +11,7 @@ module Kapacitor
   class Client
     attr_reader :uri, :http
 
-    def initialize(host:, version: 'v1')
+    def initialize(host: 'localhost:9092', version: 'v1')
       @uri = URI.parse("http://#{host}/kapacitor/#{version}")
       @http = Net::HTTP.new(@uri.host, @uri.port)
     end
