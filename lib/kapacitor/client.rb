@@ -56,7 +56,7 @@ module Kapacitor
       }
 
       if template_id
-        req['template_id'] = template_id
+        req['template-id'] = template_id
       else
         req['type'] = type
         req['script'] = script
@@ -69,7 +69,7 @@ module Kapacitor
 
     def update_task(id:, template_id: nil, type: nil, dbrps: nil, script: nil, status: nil, vars: nil)
       req = {}
-      req['template_id'] = template_id if template_id
+      req['template-id'] = template_id if template_id
       req['type'] = type if type
       req['dbrps'] = dbrps if dbrps
       req['script'] = script if script
