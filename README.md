@@ -21,7 +21,7 @@ kapacitor = Kapacitor::Client.new(host: 'localhost:9092', version: 'v1')
 #### `define_template`
 Create a new template definition
 ```
-define_template(id: 'name', type: 'stream', script: 'tickscript
+define_template(id: 'name', type: 'stream', script: 'tickscript')
 ```
 
 #### `update_template`
@@ -39,7 +39,7 @@ delete_template(id: 'name')
 #### `templates`
 Fetch all templates
 ```
-templates
+templates()
 ```
 
 ### Tasks
@@ -66,7 +66,7 @@ delete_task(id: 'name')
 #### `tasks`
 Fetch all tasks
 ```
-tasks
+tasks()
 ```
 
 ## Contact
