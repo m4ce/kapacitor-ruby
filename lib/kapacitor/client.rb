@@ -85,9 +85,12 @@ module Kapacitor
 
     def tasks
       tasks = []
+
       api_get('/tasks?fields=id')['tasks'].each do |id|
         tasks << api_get("/tasks/#{id}")['tasks'].each do |id|
       end
+
+      tasks
     end
 
 private
