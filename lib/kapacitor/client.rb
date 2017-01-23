@@ -12,7 +12,7 @@ module Kapacitor
     attr_reader :uri, :http
 
     def initialize(opts = {})
-      host = opts['host'] || 'localhost'
+      host = opts['host'] || 'localhost:9092'
       version = opts['version'] || 'v1'
 
       @uri = URI.parse("http://#{host}/kapacitor/#{version}")
