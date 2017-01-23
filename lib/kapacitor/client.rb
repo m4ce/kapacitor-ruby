@@ -15,7 +15,7 @@ module Kapacitor
       host = opts['host'] || 'localhost'
       version = opts['version'] || 'v1'
 
-      @uri = URI.parse("http://#{opts['host']}/kapacitor/#{opts['version']}")
+      @uri = URI.parse("http://#{host}/kapacitor/#{version}")
       @http = Net::HTTP.new(@uri.host, @uri.port)
     end
 
