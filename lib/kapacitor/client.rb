@@ -11,30 +11,44 @@ module Kapacitor
   class Client
     attr_reader :uri, :http
 
-    def initialize(host: 'localhost:9092', version: 'v1')
-      @uri = URI.parse("http://#{host}/kapacitor/#{version}")
+    def initialize(opts = {})
+      raise ArgumentError, "Kapacitor host is required" unless opts['host']
+      raise ArgumentError, "Kapacitor API version is required" unless opts['version']
+
+      @uri = URI.parse("http://#{opts['host']}/kapacitor/#{opts['version']}")
       @http = Net::HTTP.new(@uri.host, @uri.port)
     end
 
-    def define_template(id:, type:, script:)
+    def define_template(id, opts = {})
+      raise ArgumentError, "Kapacitor template type is required" unless opts['type']
+      raise ArgumentError, "Kapacitor template tickscript required" unless opts['script']
+
+      if opts['type']
+        raise ArgumentError, "Kapacitor template type can be either 'batch' or 'stream'" unless (opts['type'] == 'batch' or opts['type'] == 'stream')
+      end
+
       req = {
         'id' => id,
-        'type' => type,
-        'script' => script
+        'type' => opts['type'],
+        'script' => opts['script']
       }
 
       api_post('/templates', req)
     end
 
-    def update_template(id:, type: nil, script: nil)
+    def update_template(id, opts = {})
       req = {}
-      req['type'] = type if type
-      req['script'] = script if script
+      req['type'] = type if opts['type']
+      req['script'] = script if opts['script']
+
+      if opts['type']
+        raise ArgumentError, "Kapacitor template type can be either 'batch' or 'stream'" unless (opts['type'] == 'batch' or opts['type'] == 'stream')
+      end
 
       api_patch("/templates/#{id}", req) unless req.empty?
     end
 
-    def delete_template(id:)
+    def delete_template(id)
       api_delete("/templates/#{id}")
     end
 
@@ -42,44 +56,62 @@ module Kapacitor
       api_get('/templates')['templates']
     end
 
-    def define_task(id:, template_id: nil, type: nil, dbrps: , script: nil, status: 'enabled', vars: nil)
-      if (template_id.nil? and type.nil? and script.nil?) or (template_id and (type or script))
+    def define_task(id, opts = {})
+      raise ArgumentError, "Kapacitor task dbrps is required"
+
+      if (opts['template_id'].nil? and opts['type'].nil? and opts['script'].nil?) or (opts['template_id'] and (opts['type'] or opts['script']))
         raise ArgumentError, "Must specify either a Template ID or a script and type"
-      elsif template_id.nil? and (type.nil? or script.nil?)
+      elsif opts['template_id'].nil? and (opts['type'].nil? or opts['script'].nil?)
         raise ArgumentError, "Must specify both task type and script when not using a Template ID"
+      end
+
+      if opts['status']
+        raise ArgumentError, "Kapacitor task status can be either 'enabled' or 'disabled'" unless (opts['status'] == 'enabled' or opts['status'] == 'disabled')
+      end
+
+      if opts['type']
+        raise ArgumentError, "Kapacitor task type can be either 'batch' or 'stream'" unless (opts['type'] == 'batch' or opts['type'] == 'stream')
       end
 
       req = {
         'id' => id,
-        'dbrps' => dbrps,
-        'status' => status
+        'dbrps' => opts['dbrps'],
+        'status' => opts['status'] || 'enabled'
       }
 
-      if template_id
-        req['template-id'] = template_id
+      if opts['template_id']
+        req['template-id'] = opts['template_id']
       else
-        req['type'] = type
-        req['script'] = script
+        req['type'] = opts['type']
+        req['script'] = opts['script']
       end
 
-      req['vars'] = vars if vars
+      req['vars'] = opts['vars'] if opts['vars']
 
       api_post('/tasks', req)
     end
 
-    def update_task(id:, template_id: nil, type: nil, dbrps: nil, script: nil, status: nil, vars: nil)
+    def update_task(id, opts = {})
       req = {}
-      req['template-id'] = template_id if template_id
-      req['type'] = type if type
-      req['dbrps'] = dbrps if dbrps
-      req['script'] = script if script
-      req['status'] = status if status
-      req['vars'] = vars if vars
+      req['template-id'] = opts['template_id'] if opts['template_id']
+      req['type'] = opts['type'] if opts['type']
+      req['dbrps'] = opts['dbrps'] if opts['dbrps']
+      req['script'] = opts['script'] if opts['script']
+      req['status'] = opts['status'] if opts['status']
+      req['vars'] = opts['vars'] if opts['vars']
+
+      if opts['type']
+        raise ArgumentError, "Kapacitor template type can be either 'batch' or 'stream'" unless (opts['type'] == 'batch' or opts['type'] == 'stream')
+      end
+
+      if opts['status']
+        raise ArgumentError, "Kapacitor task status can be either 'enabled' or 'disabled'" unless (opts['status'] == 'enabled' or opts['status'] == 'disabled')
+      end
 
       api_patch("/tasks/#{id}", req) unless req.empty?
     end
 
-    def delete_task(id:)
+    def delete_task(id)
       api_delete("/tasks/#{id}")
     end
 
