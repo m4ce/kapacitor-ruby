@@ -12,8 +12,8 @@ module Kapacitor
     attr_reader :uri, :http
 
     def initialize(opts = {})
-      raise ArgumentError, "Kapacitor host is required" unless opts['host']
-      raise ArgumentError, "Kapacitor API version is required" unless opts['version']
+      host = opts['host'] || 'localhost'
+      version = opts['version'] || 'v1'
 
       @uri = URI.parse("http://#{opts['host']}/kapacitor/#{opts['version']}")
       @http = Net::HTTP.new(@uri.host, @uri.port)
