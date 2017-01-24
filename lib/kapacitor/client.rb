@@ -38,8 +38,8 @@ module Kapacitor
 
     def update_template(id, opts = {})
       req = {}
-      req['type'] = type if opts['type']
-      req['script'] = script if opts['script']
+      req['type'] = opts['type'] if opts['type']
+      req['script'] = opts['script'] if opts['script']
 
       if opts['type']
         raise ArgumentError, "Kapacitor template type can be either 'batch' or 'stream'" unless (opts['type'] == 'batch' or opts['type'] == 'stream')
