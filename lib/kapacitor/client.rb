@@ -57,7 +57,7 @@ module Kapacitor
     end
 
     def define_task(id, opts = {})
-      raise ArgumentError, "Kapacitor task dbrps is required"
+      raise ArgumentError, "Kapacitor task dbrps is required" unless opts['dbrps']
 
       if (opts['template_id'].nil? and opts['type'].nil? and opts['script'].nil?) or (opts['template_id'] and (opts['type'] or opts['script']))
         raise ArgumentError, "Must specify either a Template ID or a script and type"
