@@ -1,8 +1,6 @@
 #
 # client.rb
 #
-# Author: Matteo Cerutti <matteo.cerutti@hotmail.co.uk>
-#
 
 require 'net/http'
 require 'json'
@@ -52,8 +50,17 @@ module Kapacitor
       api_delete("/templates/#{id}")
     end
 
-    def templates
-      api_get('/templates')['templates']
+    def templates(offset: 0, limit: 100)
+      templates = []
+
+      loop do
+        res = api_get("/templates?offset=#{offset}&limit=#{limit}")['templates']
+        break unless res.size > 0
+        templates += res
+        offset += limit
+      end
+
+      templates
     end
 
     def define_task(id, opts = {})
@@ -115,11 +122,18 @@ module Kapacitor
       api_delete("/tasks/#{id}")
     end
 
-    def tasks
+    def tasks(offset: 0, limit: 100)
       tasks = []
 
-      api_get('/tasks?fields=id')['tasks'].each do |task|
-        tasks << api_get("/tasks/#{task['id']}")
+      loop do
+        res = api_get("/tasks?fields=id&offset=#{offset}&limit=#{limit}")['tasks']
+        break unless res.size > 0
+
+        res.each do |task|
+          tasks << api_get("/tasks/#{task['id']}")
+        end
+
+        offset += limit
       end
 
       tasks
