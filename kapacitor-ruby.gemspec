@@ -17,5 +17,6 @@ Gem::Specification.new do |s|
   s.summary = 'Ruby client library that allows to interact with the Kapacitor JSON REST API'
   s.version = Kapacitor.version
 
+  s.add_runtime_dependency 'httpclient', '>= 2.4.0'
   s.add_runtime_dependency 'json', '>= 1.7.0'
 end
