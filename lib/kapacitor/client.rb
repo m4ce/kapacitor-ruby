@@ -13,8 +13,8 @@ module Kapacitor
     # @param url [String] Kapacitor REST API's URL (defaults to `http://localhost:9092`)
     # @param version [Integer] API version (defaults to `v1preview`)
     #
-    def initialize(host: 'http://localhost:9092', version: 'v1preview')
-      @uri = URI.parse("#{host}/kapacitor/#{version}")
+    def initialize(url: 'http://localhost:9092', version: 'v1preview')
+      @uri = URI.parse("#{url}/kapacitor/#{version}")
       @http = Net::HTTP.new(@uri.host, @uri.port)
     end
 
