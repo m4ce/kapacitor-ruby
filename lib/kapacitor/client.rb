@@ -14,8 +14,8 @@ module Kapacitor
     # @param version [Integer] API version (defaults to `v1preview`)
     #
     def initialize(url: 'http://localhost:9092/kapacitor', version: 'v1preview')
-      @url = URI.join(url, version)
       @http = HTTPClient.new
+      @url = [url, version].join('/')
     end
 
     # Define a Kapacitor template
@@ -33,7 +33,7 @@ module Kapacitor
         'script' => script
       }
 
-      api_post(endpoint: '/templates', data: req)
+      api_post(endpoint: 'templates', data: req)
     end
 
     # Update a Kapacitor template
@@ -50,7 +50,7 @@ module Kapacitor
         raise ArgumentError, "Kapacitor template type can be either 'batch' or 'stream'" unless opts[:type] == 'batch' or opts[:type] == 'stream'
       end
 
-      api_patch(endpoint: "/templates/#{id}", data: req) unless req.empty?
+      api_patch(endpoint: "templates/#{id}", data: req) unless req.empty?
     end
 
     # Delete a Kapacitor template
@@ -58,7 +58,7 @@ module Kapacitor
     # @param id [String] Template ID
     #
     def delete_template(id:)
-      api_delete(endpoint: "/templates/#{id}")
+      api_delete(endpoint: "templates/#{id}")
     end
 
     # Retrieve Kapacitor templates
@@ -116,7 +116,7 @@ module Kapacitor
 
       req['vars'] = opts[:vars] if opts[:vars]
 
-      api_post(endpoint: '/tasks', data: req)
+      api_post(endpoint: 'tasks', data: req)
     end
 
     # Update a Kapacitor task
@@ -141,7 +141,7 @@ module Kapacitor
         raise ArgumentError, "Kapacitor task status can be either 'enabled' or 'disabled'" unless opts[:status] == 'enabled' || opts[:status] == 'disabled'
       end
 
-      api_patch(endpoint: "/tasks/#{id}", data: req) unless req.empty?
+      api_patch(endpoint: "tasks/#{id}", data: req) unless req.empty?
     end
 
     # Delete a Kapacitor task
@@ -149,7 +149,7 @@ module Kapacitor
     # @param id [String] Task ID
     #
     def delete_task(id:)
-      api_delete(endpoint: "/tasks/#{id}")
+      api_delete(endpoint: "tasks/#{id}")
     end
 
     # Retrieve Kapacitor tasks
@@ -193,7 +193,7 @@ module Kapacitor
       end
 
       req['actions'] = actions
-      api_post(endpoint: "/alerts/topics/#{topic}/handlers", data: req)
+      api_post(endpoint: "alerts/topics/#{topic}/handlers", data: req)
     end
 
     # Update a topic handler
@@ -209,7 +209,7 @@ module Kapacitor
       raise ArgumentError, "Kapacitor topic handler requires one or more actions" unless actions.size > 0
 
       req['actions'] = actions
-      api_put(endpoint: "/alerts/topics/#{topic}/handlers/#{id}", data: req) unless req.empty?
+      api_put(endpoint: "alerts/topics/#{topic}/handlers/#{id}", data: req) unless req.empty?
     end
 
     # Delete a topic handler
@@ -218,7 +218,7 @@ module Kapacitor
     # @param topic [String] Topic name
     #
     def delete_topic_handler(id:, topic:)
-      api_delete(endpoint: "/alerts/topics/#{topic}/handlers/#{id}")
+      api_delete(endpoint: "alerts/topics/#{topic}/handlers/#{id}")
     end
 
     # Retrieve topic's handlers
