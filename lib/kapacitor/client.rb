@@ -29,7 +29,7 @@ module Kapacitor
 
       req = {
         'id' => id,
-        'type' => type
+        'type' => type,
         'script' => script
       }
 
