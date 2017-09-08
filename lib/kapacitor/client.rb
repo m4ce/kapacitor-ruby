@@ -89,7 +89,7 @@ module Kapacitor
     def define_task(id:, dbrps:, **opts)
       if (opts[:template_id].nil? && opts[:type].nil? && opts[:script].nil?) || (opts[:template_id] && (opts[:type] || opts[:script]))
         raise ArgumentError, "Must specify either a Template ID or a script and type"
-      elsif opts['template_id'].nil? && (opts['type'].nil? || opts['script'].nil?)
+      elsif opts[:template_id].nil? && (opts[:type].nil? || opts[:script].nil?)
         raise ArgumentError, "Must specify both task type and script when not using a Template ID"
       end
 
