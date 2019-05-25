@@ -290,7 +290,7 @@ private
         if resp.status == 204
           if resp.body
             begin
-              data = JSON.parse(resp.body)
+              data = JSON.parse(resp.body) unless resp.body.blank?
             rescue JSON::ParserError
               raise Exception, "Failed to decode response message"
             end
