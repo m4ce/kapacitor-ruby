@@ -240,14 +240,14 @@ private
     def api_get(endpoint:, query: nil)
       begin
         resp = self.http.get([self.url, endpoint].join('/'), query, {'Content-type' => 'application/json', 'Accept' => 'application/json'})
-        if resp.status == 200
-          begin
-            data = JSON.parse(resp.body)
-          rescue JSON::ParserError
-            raise Exception, "Failed to decode response message"
-          end
-        else
-          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason})"
+        begin
+          data = JSON.parse(resp.body) unless resp.body.blank?
+        rescue JSON::ParserError
+          raise Exception, "Failed to decode response message"
+        end
+        if resp.status != 200
+          error = data.include?('error') ? data['error'] : data.inspect if data
+          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason}#{", Error: #{error}" if error}"
         end
       rescue
         raise Exception, "Failed to execute GET request to Kapacitor REST API (#{$!})"
@@ -264,14 +264,14 @@ private
     def api_post(endpoint:, data:)
       begin
         resp = self.http.post([self.url, endpoint].join('/'), data.to_json, {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
-        if resp.status == 200
-          begin
-            data = JSON.parse(resp.body)
-          rescue JSON::ParserError
-            raise Exception, "Failed to decode response message"
-          end
-        else
-          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason})"
+        begin
+          data = JSON.parse(resp.body) unless resp.body.blank?
+        rescue JSON::ParserError
+          raise Exception, "Failed to decode response message"
+        end
+        if resp.status != 200
+          error = data.include?('error') ? data['error'] : data.inspect if data
+          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason}#{", Error: #{error}" if error}"
         end
       rescue
         raise Exception, "Failed to execute POST request to Kapacitor REST API (#{$!})"
@@ -287,16 +287,14 @@ private
     def api_delete(endpoint:)
       begin
         resp = self.http.delete([self.url, endpoint].join('/'), {'Content-type' => 'application/json', 'Accept' => 'application/json'})
-        if resp.status == 204
-          if resp.body
-            begin
-              data = JSON.parse(resp.body) unless resp.body.blank?
-            rescue JSON::ParserError
-              raise Exception, "Failed to decode response message"
-            end
-          end
-        else
-          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason})"
+        begin
+          data = JSON.parse(resp.body) unless resp.body.blank?
+        rescue JSON::ParserError
+          raise Exception, "Failed to decode response message"
+        end
+        if resp.status != 204
+          error = data.include?('error') ? data['error'] : data.inspect if data
+          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason}#{", Error: #{error}" if error}"
         end
       rescue
         raise Exception, "Failed to execute DELETE request to Kapacitor REST API (#{$!})"
@@ -313,14 +311,14 @@ private
     def api_patch(endpoint:, data:)
       begin
         resp = self.http.patch([self.url, endpoint].join('/'), data.to_json, {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
-        if resp.status == 200
-          begin
-            data = JSON.parse(resp.body)
-          rescue JSON::ParserError
-            raise Exception, "Failed to decode response message"
-          end
-        else
-          raise Exception, "Query returned a non successful HTTP code (Code: #{resp.status}, Reason: #{resp.reason})"
+        begin
+          data = JSON.parse(resp.body) unless resp.body.blank?
+        rescue JSON::ParserError
+          raise Exception, "Failed to decode response message"
+        end
+        if resp.status != 200
+          error = data.include?('error') ? data['error'] : data.inspect if data
+          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason}#{", Error: #{error}" if error}"
         end
       rescue
         raise Exception, "Failed to execute PATCH request to Kapacitor REST API (#{$!})"
@@ -337,14 +335,14 @@ private
     def api_put(endpoint:, data:)
       begin
         resp = self.http.put([self.url, endpoint].join('/'), data.to_json, {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
-        if resp.status == 200
-          begin
-            data = JSON.parse(resp.body)
-          rescue JSON::ParserError
-            raise Exception, "Failed to decode response message"
-          end
-        else
-          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason})"
+        begin
+          data = JSON.parse(resp.body) unless resp.body.blank?
+        rescue JSON::ParserError
+          raise Exception, "Failed to decode response message"
+        end
+        if resp.status != 200
+          error = data.include?('error') ? data['error'] : data.inspect if data
+          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason}#{", Error: #{error}" if error}"
         end
       rescue
         raise Exception, "Failed to execute PUT request to Kapacitor REST API (#{$!})"
