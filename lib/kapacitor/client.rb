@@ -246,7 +246,8 @@ private
           raise Exception, "Failed to decode response message"
         end
         if resp.status != 200
-          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason})\n#{data.inspect if data}"
+          error = data.include?('error') ? data['error'] : data.inspect if data
+          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason}#{", Error: #{error}" if error}"
         end
       rescue
         raise Exception, "Failed to execute GET request to Kapacitor REST API (#{$!})"
@@ -269,7 +270,8 @@ private
           raise Exception, "Failed to decode response message"
         end
         if resp.status != 200
-          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason})\n#{data.inspect if data}"
+          error = data.include?('error') ? data['error'] : data.inspect if data
+          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason}#{", Error: #{error}" if error}"
         end
       rescue
         raise Exception, "Failed to execute POST request to Kapacitor REST API (#{$!})"
@@ -291,7 +293,8 @@ private
           raise Exception, "Failed to decode response message"
         end
         if resp.status != 204
-          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason})\n#{data.inspect if data}"
+          error = data.include?('error') ? data['error'] : data.inspect if data
+          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason}#{", Error: #{error}" if error}"
         end
       rescue
         raise Exception, "Failed to execute DELETE request to Kapacitor REST API (#{$!})"
@@ -314,7 +317,8 @@ private
           raise Exception, "Failed to decode response message"
         end
         if resp.status != 200
-          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason})\n#{data.inspect if data}"
+          error = data.include?('error') ? data['error'] : data.inspect if data
+          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason}#{", Error: #{error}" if error}"
         end
       rescue
         raise Exception, "Failed to execute PATCH request to Kapacitor REST API (#{$!})"
@@ -337,7 +341,8 @@ private
           raise Exception, "Failed to decode response message"
         end
         if resp.status != 200
-          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason})\n#{data.inspect if data}"
+          error = data.include?('error') ? data['error'] : data.inspect if data
+          raise Exception, "Query returned a non successful HTTP code (Status: #{resp.status}, Reason: #{resp.reason}#{", Error: #{error}" if error}"
         end
       rescue
         raise Exception, "Failed to execute PUT request to Kapacitor REST API (#{$!})"
