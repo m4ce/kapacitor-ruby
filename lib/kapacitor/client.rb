@@ -188,20 +188,17 @@ module Kapacitor
     #
     # @param id [String] Handler ID
     # @param topic [String] Topic name
-    # @param actions [Array[Hash]] Handler actions
+    # @param kind [String] Kind of handler
+    # @param match [String] Lambda expression
+    # @param options [Hash] Handler options
     #
-    def define_topic_handler(id:, topic:, actions:)
-      req = {}
-      req['id'] = id
-
-      actions = [actions] unless actions.is_a?(Array)
-      raise ArgumentError, "Kapacitor topic handler requires one or more actions" unless actions.size > 0
-
-      actions.each do |action|
-        raise ArgumentError, "Missing required kind attribute for action #{action}"
-      end
-
-      req['actions'] = actions
+    def define_topic_handler(id:, topic:, kind:, match: nil, options: {})
+      req = {
+        'id': id,
+        'kind': kind
+      }
+      req['match'] = match unless match.nil?
+      req['options'] = options
       api_post(endpoint: "alerts/topics/#{topic}/handlers", data: req)
     end
 
@@ -209,15 +206,17 @@ module Kapacitor
     #
     # @param id [String] Handler ID
     # @param topic [String] Topic name
-    # @param actions [Array[Hash]] Handler actions
+    # @param kind [String] Kind of handler
+    # @param match [String] Lambda expression
+    # @param options [Hash] Handler options
     #
-    def update_topic_handler(id:, topic:, actions:)
-      req = {}
-
-      actions = [actions] unless actions.is_a?(Array)
-      raise ArgumentError, "Kapacitor topic handler requires one or more actions" unless actions.size > 0
-
-      req['actions'] = actions
+    def update_topic_handler(id:, topic:, kind:, match: nil, options: {})
+      req = {
+        'id': id,
+        'kind': kind
+      }
+      req['match'] = match unless match.nil?
+      req['options'] = options
       api_put(endpoint: "alerts/topics/#{topic}/handlers/#{id}", data: req) unless req.empty?
     end
 
