@@ -13,7 +13,7 @@ module Kapacitor
     # @param url [String] Kapacitor REST API's URL (defaults to `http://localhost:9092`)
     # @param version [Integer] API version (defaults to `v1preview`)
     #
-    def initialize(url: 'http://localhost:9092/kapacitor', version: 'v1preview')
+    def initialize(url: 'http://localhost:9092/kapacitor', version: 'v1')
       @http = HTTPClient.new
       @url = [url, version].join('/')
     end
@@ -59,6 +59,15 @@ module Kapacitor
     #
     def delete_template(id:)
       api_delete(endpoint: "templates/#{id}")
+    end
+
+    # Retrieve Kapacitor topic
+    #
+    # @return [List[String]] List of topics
+    #
+    def topics()
+      res = api_get(endpoint: "alerts/topics")['topics']
+      return res['topics'].map { |v| v['id'] }
     end
 
     # Retrieve Kapacitor templates
