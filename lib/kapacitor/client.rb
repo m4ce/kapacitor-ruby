@@ -66,7 +66,7 @@ module Kapacitor
     # @return [List[String]] List of topics
     #
     def topics()
-      res = api_get(endpoint: "alerts/topics")['topics']
+      res = api_get(endpoint: "alerts/topics")
       return res['topics'].map { |v| v['id'] }
     end
 
@@ -250,7 +250,7 @@ private
       begin
         resp = self.http.get([self.url, endpoint].join('/'), query, {'Content-type' => 'application/json', 'Accept' => 'application/json'})
         begin
-          data = JSON.parse(resp.body) unless resp.body.blank?
+          data = JSON.parse(resp.body) unless resp.body.empty?
         rescue JSON::ParserError
           raise Exception, "Failed to decode response message"
         end
@@ -274,7 +274,7 @@ private
       begin
         resp = self.http.post([self.url, endpoint].join('/'), data.to_json, {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
         begin
-          data = JSON.parse(resp.body) unless resp.body.blank?
+          data = JSON.parse(resp.body) unless resp.body.empty?
         rescue JSON::ParserError
           raise Exception, "Failed to decode response message"
         end
@@ -297,7 +297,7 @@ private
       begin
         resp = self.http.delete([self.url, endpoint].join('/'), {'Content-type' => 'application/json', 'Accept' => 'application/json'})
         begin
-          data = JSON.parse(resp.body) unless resp.body.blank?
+          data = JSON.parse(resp.body) unless resp.body.empty?
         rescue JSON::ParserError
           raise Exception, "Failed to decode response message"
         end
@@ -321,7 +321,7 @@ private
       begin
         resp = self.http.patch([self.url, endpoint].join('/'), data.to_json, {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
         begin
-          data = JSON.parse(resp.body) unless resp.body.blank?
+          data = JSON.parse(resp.body) unless resp.body.empty?
         rescue JSON::ParserError
           raise Exception, "Failed to decode response message"
         end
@@ -345,7 +345,7 @@ private
       begin
         resp = self.http.put([self.url, endpoint].join('/'), data.to_json, {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
         begin
-          data = JSON.parse(resp.body) unless resp.body.blank?
+          data = JSON.parse(resp.body) unless resp.body.empty?
         rescue JSON::ParserError
           raise Exception, "Failed to decode response message"
         end
