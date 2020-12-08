@@ -210,13 +210,13 @@ module Kapacitor
     # @param match [String] Lambda expression
     # @param options [Hash] Handler options
     #
-    def update_topic_handler(id:, topic:, kind:, match: nil, options: {})
+    def update_topic_handler(id:, topic:, kind:, match: nil, options: nil)
       req = {
         'id': id,
         'kind': kind
       }
       req['match'] = match unless match.nil?
-      req['options'] = options
+      req['options'] = options unless options.nil?
       api_put(endpoint: "alerts/topics/#{topic}/handlers/#{id}", data: req) unless req.empty?
     end
 
