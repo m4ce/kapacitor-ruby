@@ -139,7 +139,7 @@ module Kapacitor
       req['type'] = opts[:type] if opts[:type]
       req['dbrps'] = opts[:dbrps] if opts[:dbrps]
       req['script'] = opts[:script] if opts[:script]
-      req['status'] = opts[:status] if opts[:status]
+      req['status'] = 'disabled'
       req['vars'] = opts[:vars] if opts[:vars]
 
       if opts[:type]
@@ -151,6 +151,12 @@ module Kapacitor
       end
 
       api_patch(endpoint: "tasks/#{id}", data: req) unless req.empty?
+
+      if opts[:status] == 'enabled'
+        req['status'] = opts[:status] if opts[:status]
+        api_patch(endpoint: "tasks/#{id}", data: req) unless req.empty?
+      end
+
     end
 
     # Delete a Kapacitor task
