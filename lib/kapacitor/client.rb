@@ -152,8 +152,8 @@ module Kapacitor
 
       api_patch(endpoint: "tasks/#{id}", data: req) unless req.empty?
 
-      if opts[:status] == 'enabled'
-        req['status'] = opts[:status] if opts[:status]
+      if opts['status'] == 'enabled'
+        req['status'] = 'enabled'
         api_patch(endpoint: "tasks/#{id}", data: req) unless req.empty?
       end
 
